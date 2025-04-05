@@ -1,0 +1,1 @@
+shift from react-email library to ejs for faster email responses
