@@ -16,11 +16,20 @@ import { trpc } from "@/trpc/client"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import { useAuthStore } from "@/lib/store/auth-store"
+import { useEffect } from "react"
 
 export const Login = () => {
   const router = useRouter()
+  const email = useAuthStore((state) => state.email)
   const { mutate: Login, isPending } = trpc.user.login.useMutation()
 
+  // Redirect to verify-email page if email exists in global state
+  useEffect(() => {
+    if (email) {
+      router.replace("/verify-email")
+    }
+  }, [email, router])
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)

@@ -1,15 +1,17 @@
 import { Navbar } from "@/components/header"
-import { type ReactNode } from "react"
+import React from "react"
 
-function LandingPageLayout({ children }: { children: ReactNode }) {
+interface Props {
+  children: React.ReactNode
+}
+
+const LandingLayout = ({ children }: Props) => {
   return (
-    <>
+    <div>
       <Navbar />
       {children}
-      {/* <div className="h-20"></div> */}
-      {/* <Footer /> */}
-    </>
+    </div>
   )
 }
 
-export default LandingPageLayout
+export default LandingLayout

@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { trpc } from "@/trpc/client"
 import { AlertTriangle } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { redirect, useRouter } from "next/navigation"
 import { useRef, useState } from "react"
 import { toast } from "sonner"
 import { useAuthStore } from "@/lib/store/auth-store"
@@ -19,6 +19,11 @@ export const VerifyCode = () => {
 
   const { mutate } = trpc.user.verifyEmail.useMutation()
   const { mutate: resendCode } = trpc.user.resendVerificationCode.useMutation()
+
+  const handleEmailCorrection = () => {
+    clearEmail()
+    redirect("/signup")
+  }
 
   const handleVerifyEmail = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -98,6 +103,14 @@ export const VerifyCode = () => {
         }}
       >
         {isResending ? "Sending..." : "Resend Code"}
+      </Button>
+
+      <Button
+        variant="link"
+        className="mt-2"
+        onClick={handleEmailCorrection}
+      >
+        Entered wrong email? click here
       </Button>
     </div>
   )

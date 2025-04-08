@@ -12,7 +12,7 @@ import {} from "@/components/icon"
 import Link from "next/link"
 import { useAuthStore } from "@/lib/store/auth-store"
 
-import React from "react"
+import React, { useEffect } from "react"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"
@@ -20,11 +20,17 @@ import { trpc } from "@/trpc/client"
 import { SignUpInput } from "@/lib/validators/auth"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
-// import { useFormState } from "react-dom"
 
 export const SignUp = () => {
-  // const [state, formAction] = useFormState()
   const router = useRouter()
+  const email = useAuthStore((state) => state.email)
+
+  // Redirect to verify-email page if email exists in global state
+  useEffect(() => {
+    if (email) {
+      router.replace("/verify-email")
+    }
+  }, [email, router])
 
   const { mutate, isPending: signUpPending } = trpc.user.register.useMutation()
 
