@@ -2,10 +2,10 @@ import { Lucia, TimeSpan } from "lucia"
 import { Discord } from "arctic"
 import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle"
 import { db } from "@/db"
-import { sessions, users, type User as DbUser } from "@/db/schema"
+import { sessions, Users, type User as DbUser } from "@/db/schema"
 import { absoluteUrl } from "../utils"
 
-const adapter = new DrizzlePostgreSQLAdapter(db, sessions, users)
+const adapter = new DrizzlePostgreSQLAdapter(db, sessions, Users)
 
 export const lucia = new Lucia(adapter, {
   getSessionAttributes: (attributes) => {

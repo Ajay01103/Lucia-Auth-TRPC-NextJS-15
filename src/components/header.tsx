@@ -1,48 +1,6 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { RocketIcon } from "lucide-react"
-
-const routes = [
-  { name: "Home", href: "/" },
-  { name: "Features", href: "/#features" },
-  {
-    name: "Documentation",
-    href: "https://www.touha.dev/posts/simple-nextjs-t3-authentication-with-lucia",
-  },
-] as const
-
 export const Navbar = () => {
   return (
-    // <header className="mx-auto py-4 lg:py-6 max-w-6xl">
-    //   <div className="container flex items-center gap-2 p-0">
-    //     <Link
-    //       className="flex items-center justify-center text-xl font-medium"
-    //       href="/"
-    //     >
-    //       <RocketIcon className="mr-2 h-5 w-5" /> ACME
-    //     </Link>
-    //     <nav className="ml-10 hidden gap-4 sm:gap-6 md:flex">
-    //       {routes.map(({ name, href }) => (
-    //         <Link
-    //           key={name}
-    //           className="text-sm font-medium text-muted-foreground/70 transition-colors hover:text-muted-foreground"
-    //           href={href}
-    //         >
-    //           {name}
-    //         </Link>
-    //       ))}
-    //     </nav>
-    //     <div className="ml-auto">
-    //       <Button
-    //         asChild
-    //         variant={"secondary"}
-    //       >
-    //         <Link href="/login">Login</Link>
-    //       </Button>
-    //     </div>
-    //   </div>
-    // </header>
-    <header className="sticky z-40 max-w-6xl mx-auto">
+    <header className="sticky z-40 flex  max-w-6xl mx-auto">
       <div className="container">
         <div className="bg-opacity-15 border rounded-2xl flex items-center p-2 bg-background/70 backdrop-blur-sm">
           <div className="flex-1">
@@ -58,9 +16,9 @@ export const Navbar = () => {
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   className="lucide lucide-sun-dim size-5 lg:size-6 text-white"
                 >
                   <circle
@@ -81,44 +39,6 @@ export const Navbar = () => {
               <h5 className="text-lg lg:text-xl">Cosmic</h5>
             </a>
           </div>
-          {/* <div className="flex items-center lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              className="lucide lucide-menu cursor-pointer lg:hidden"
-              type="button"
-              aria-haspopup="dialog"
-              aria-expanded="false"
-              aria-controls="radix-:R9kq:"
-              data-state="closed"
-            >
-              <line
-                x1="4"
-                x2="20"
-                y1="12"
-                y2="12"
-              ></line>
-              <line
-                x1="4"
-                x2="20"
-                y1="6"
-                y2="6"
-              ></line>
-              <line
-                x1="4"
-                x2="20"
-                y1="18"
-                y2="18"
-              ></line>
-            </svg>
-          </div> */}
           <nav
             aria-label="Main"
             data-orientation="horizontal"
@@ -133,28 +53,28 @@ export const Navbar = () => {
               >
                 <li>
                   <a
-                    className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 !bg-transparent"
+                    className="group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 !bg-transparent"
                     data-radix-collection-item=""
                     href="#solutions"
                   >
                     Solutions
                   </a>
                   <a
-                    className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 !bg-transparent"
+                    className="group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 !bg-transparent"
                     data-radix-collection-item=""
                     href="#pricing"
                   >
                     Pricing
                   </a>
                   <a
-                    className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 !bg-transparent"
+                    className="group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 !bg-transparent"
                     data-radix-collection-item=""
                     href="#team"
                   >
                     Team
                   </a>
                   <a
-                    className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 !bg-transparent"
+                    className="group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50 !bg-transparent"
                     data-radix-collection-item=""
                     href="#contact"
                   >
