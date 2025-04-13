@@ -240,12 +240,12 @@ export const userRouter = createTRPCRouter({
       }
 
       //checking if the user have already used oauth
-      // if (user.discordId) {
-      //   throw new TRPCError({
-      //     code: "BAD_REQUEST",
-      //     message: "Cannot reset password for Discord accounts",
-      //   })
-      // }
+      if (user.discordId) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Cannot reset password for Discord accounts",
+        })
+      }
 
       const verificationToken = await generatePasswordResetToken(user.id)
       const verificationLink = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password/${verificationToken}`
