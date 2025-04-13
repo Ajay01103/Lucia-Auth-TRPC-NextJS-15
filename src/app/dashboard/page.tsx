@@ -10,7 +10,13 @@ const DashboardPage = async () => {
   if (!user) redirect("/login")
   return (
     <div>
-      <Button onClick={logout}>Logout</Button>
+      <Button
+        variant="destructive"
+        onClick={logout}
+      >
+        Logout
+      </Button>
+      {JSON.stringify(user)}
     </div>
   )
 }

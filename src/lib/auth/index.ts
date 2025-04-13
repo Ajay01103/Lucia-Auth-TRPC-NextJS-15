@@ -31,10 +31,13 @@ export const lucia = new Lucia(adapter, {
   },
 })
 
+// Use the exact redirect URI that's configured in the Discord Developer Portal
+const DISCORD_REDIRECT_URI = "http://localhost:3000/login/discord/callback"
+
 export const discord = new Discord(
   process.env.DISCORD_CLIENT_ID!,
   process.env.DISCORD_CLIENT_SECRET!,
-  absoluteUrl("/login/discord/callback")
+  DISCORD_REDIRECT_URI
 )
 
 declare module "lucia" {

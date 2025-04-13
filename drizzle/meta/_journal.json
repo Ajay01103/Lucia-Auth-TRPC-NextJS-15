@@ -15,6 +15,13 @@
       "when": 1743328562382,
       "tag": "0001_thick_titanium_man",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1744532455735,
+      "tag": "0002_skinny_barracuda",
+      "breakpoints": true
     }
   ]
 }

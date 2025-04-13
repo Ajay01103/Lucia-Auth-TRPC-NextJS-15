@@ -120,9 +120,3 @@
     @apply bg-background text-foreground m-0 p-0;
   }
 }
-
-:root {
-  --primary: hsl(var(--primary-hsl));
-  --primary-20: hsl(var(--primary-hsl) / 0.2);
-  --primary-40: hsl(var(--primary-hsl) / 0.4);
-}

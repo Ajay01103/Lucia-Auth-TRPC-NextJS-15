@@ -1,6 +1,6 @@
 import { db } from "@/db"
 import { createTRPCRouter, publicProcedure } from "../init"
-import { emailVerificationCodes, users } from "@/db/schema"
+import { emailVerificationCodes, Users } from "@/db/schema"
 import { generateId, Scrypt } from "lucia"
 import { z } from "zod"
 import { generateEmailVerificationCode } from "@/email/generate-email-verification-code"
@@ -8,6 +8,8 @@ import { EmailTemplate, sendEmail } from "@/email"
 import { and, eq, lt, or } from "drizzle-orm"
 import { lucia } from "@/lib/auth"
 import { cookies } from "next/headers"
+import { TRPCError } from "@trpc/server"
+import { generatePasswordResetToken } from "@/email/generate-password-reset-token"
 
 export const userRouter = createTRPCRouter({
   register: publicProcedure
@@ -20,17 +22,17 @@ export const userRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       const {} = input
 
-      // const existingUser = await db.query.users.findFirst({
-      //   where: (users, { eq }) => eq(users.email, input.email),
+      // const existingUser = await db.query.Users.findFirst({
+      //   where: (Users, { eq }) => eq(Users.email, input.email),
       // })
 
-      const existingUnverifiedUser = await db.query.users.findFirst({
+      const existingUnverifiedUser = await db.query.Users.findFirst({
         where: (table, { eq }) =>
           and(eq(table.email, input.email), eq(table.emailVerified, false)),
         columns: { email: true, id: true },
       })
 
-      const existingVerifiedUser = await db.query.users.findFirst({
+      const existingVerifiedUser = await db.query.Users.findFirst({
         where: (table, { eq }) =>
           and(eq(table.email, input.email), eq(table.emailVerified, true)),
         columns: { email: true },
@@ -48,15 +50,15 @@ export const userRouter = createTRPCRouter({
         // If unverified user exists, update their password
         userId = existingUnverifiedUser.id
         await db
-          .update(users)
+          .update(Users)
           .set({
             hashedPassword,
           })
-          .where(eq(users.email, input.email))
+          .where(eq(Users.email, input.email))
       } else {
         // Create new user
         userId = newUserId
-        await db.insert(users).values({
+        await db.insert(Users).values({
           id: userId,
           email: input.email,
           hashedPassword,
@@ -81,7 +83,7 @@ export const userRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input }) => {
-      const existingUser = await db.query.users.findFirst({
+      const existingUser = await db.query.Users.findFirst({
         where: (table, { eq }) => eq(table.email, input.email),
       })
 
@@ -155,9 +157,9 @@ export const userRouter = createTRPCRouter({
 
       // Update user verification status
       await db
-        .update(users)
+        .update(Users)
         .set({ emailVerified: true })
-        .where(eq(users.id, userRecord.userId))
+        .where(eq(Users.id, userRecord.userId))
 
       // Delete the used verification code
       await db
@@ -189,7 +191,7 @@ export const userRouter = createTRPCRouter({
       const { email } = input
 
       // Find the user by email
-      const user = await db.query.users.findFirst({
+      const user = await db.query.Users.findFirst({
         where: (table, { eq }) => eq(table.email, email),
         columns: { id: true, email: true, emailVerified: true },
       })
@@ -210,5 +212,46 @@ export const userRouter = createTRPCRouter({
       })
 
       return { success: true, message: "Verification code resent successfully" }
+    }),
+  resetPassword: publicProcedure
+    .input(
+      z.object({
+        email: z.string().email(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      // Get the user to reset the password
+      const user = await db.query.Users.findFirst({
+        where: (table, { eq }) => eq(table.email, input.email),
+        // columns: {
+        //   id: true,
+        //   email: true,
+        //   emailVerified: true,
+        //   discordId: true,
+        // },
+      })
+
+      // checking if the user exists or not
+      if (!user || !user.emailVerified) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User does not exist try signup first",
+        })
+      }
+
+      //checking if the user have already used oauth
+      // if (user.discordId) {
+      //   throw new TRPCError({
+      //     code: "BAD_REQUEST",
+      //     message: "Cannot reset password for Discord accounts",
+      //   })
+      // }
+
+      const verificationToken = await generatePasswordResetToken(user.id)
+      const verificationLink = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password/${verificationToken}`
+
+      await sendEmail(user.email, EmailTemplate.PasswordReset, { link: verificationLink })
+
+      return { success: true, message: "Password reset link sent" }
     }),
 })

@@ -35,14 +35,56 @@ export async function GET(request: Request): Promise<Response> {
   }
 
   try {
-    const tokens = await discord.validateAuthorizationCode(code, storedCodeVerifier)
-    //   const tokens = await discord.validateAuthorizationCode(code);
+    // Manually validate the authorization code
+    const clientId = process.env.DISCORD_CLIENT_ID!
+    const clientSecret = process.env.DISCORD_CLIENT_SECRET!
+    const redirectUri = "http://localhost:3000/login/discord/callback"
+
+    // Exchange the code for an access token
+    const tokenResponse = await fetch("https://discord.com/api/oauth2/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        client_id: clientId,
+        client_secret: clientSecret,
+        grant_type: "authorization_code",
+        code: code,
+        redirect_uri: redirectUri,
+      }),
+    })
+
+    if (!tokenResponse.ok) {
+      const errorData = await tokenResponse.json()
+      console.error("Token exchange error:", errorData)
+      return new Response(
+        JSON.stringify({ message: "Failed to exchange code for token" }),
+        {
+          status: 400,
+        }
+      )
+    }
+
+    const tokens = await tokenResponse.json()
 
     const discordUserRes = await fetch("https://discord.com/api/users/@me", {
       headers: {
-        Authorization: `Bearer ${tokens.accessToken}`,
+        Authorization: `Bearer ${tokens.access_token}`,
       },
     })
+
+    if (!discordUserRes.ok) {
+      const errorData = await discordUserRes.json()
+      console.error("User info fetch error:", errorData)
+      return new Response(
+        JSON.stringify({ message: "Failed to fetch user information" }),
+        {
+          status: 400,
+        }
+      )
+    }
+
     const discordUser = (await discordUserRes.json()) as DiscordUser
 
     if (!discordUser.email || !discordUser.verified) {
@@ -96,11 +138,8 @@ export async function GET(request: Request): Promise<Response> {
     }
     const session = await lucia.createSession(existingUser.id, {})
     const sessionCookie = lucia.createSessionCookie(session.id)
-    ;(await cookies()).set(
-      sessionCookie.name,
-      sessionCookie.value,
-      sessionCookie.attributes
-    )
+    const Cookie = await cookies()
+    Cookie.set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes)
     return new Response(null, {
       status: 302,
       headers: { Location: "/dashboard" },

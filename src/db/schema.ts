@@ -52,6 +52,16 @@ export const emailVerificationCodes = pgTable(
   ]
 )
 
+export const passwordResetTokens = pgTable(
+  "password_reset_tokens",
+  {
+    id: varchar("id", { length: 40 }).primaryKey(),
+    userId: varchar("user_id", { length: 21 }).notNull(),
+    expiresAt: timestamp("expires_at", { withTimezone: true, mode: "date" }).notNull(),
+  },
+  (table) => [index("password_token_user_indx").on(table.userId)]
+)
+
 // Define relations
 export const emailVerificationCodesRelations = relations(
   emailVerificationCodes,

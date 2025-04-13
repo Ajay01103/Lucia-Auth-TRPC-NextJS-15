@@ -47,8 +47,8 @@ export const Hero = () => {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
+                strokeWidth="2"
+                strokeLinecap="round"
                 strokeLinejoin="round"
                 className="lucide lucide-circle-dot mt-1 size-4 shrink-0 lg:size-5"
               >
@@ -78,8 +78,8 @@ export const Hero = () => {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
+                strokeWidth="2"
+                strokeLinecap="round"
                 strokeLinejoin="round"
                 className="lucide lucide-diamond mt-1 size-4 shrink-0 lg:size-5"
               >
@@ -100,8 +100,8 @@ export const Hero = () => {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
+                strokeWidth="2"
+                strokeLinecap="round"
                 strokeLinejoin="round"
                 className="lucide lucide-blend mt-1 size-4 shrink-0 lg:size-5"
               >
@@ -184,9 +184,9 @@ export const Hero = () => {
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     className="lucide lucide-arrow-right size-4 stroke-3"
                   >
                     <path d="M5 12h14"></path>
