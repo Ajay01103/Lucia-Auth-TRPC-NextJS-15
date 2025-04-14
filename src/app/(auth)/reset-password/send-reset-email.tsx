@@ -10,7 +10,7 @@ import React from "react"
 import { toast } from "sonner"
 
 export const SendResetEmail = () => {
-  const { mutate, isPending } = trpc.user.resetPassword.useMutation()
+  const { mutate, isPending } = trpc.user.resetPasswordEmail.useMutation()
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()

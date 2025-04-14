@@ -20,11 +20,11 @@ const navItems = [
   },
   {
     name: "Pricing",
-    link: "#pricing",
+    link: "#",
   },
   {
     name: "Contact",
-    link: "#contact",
+    link: "#",
   },
 ]
 

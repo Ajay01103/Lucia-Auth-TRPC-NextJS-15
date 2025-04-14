@@ -1,6 +1,6 @@
 import { db } from "@/db"
 import { createTRPCRouter, publicProcedure } from "../init"
-import { emailVerificationCodes, Users } from "@/db/schema"
+import { emailVerificationCodes, passwordResetTokens, Users } from "@/db/schema"
 import { generateId, Scrypt } from "lucia"
 import { z } from "zod"
 import { generateEmailVerificationCode } from "@/email/generate-email-verification-code"
@@ -213,7 +213,7 @@ export const userRouter = createTRPCRouter({
 
       return { success: true, message: "Verification code resent successfully" }
     }),
-  resetPassword: publicProcedure
+  resetPasswordEmail: publicProcedure
     .input(
       z.object({
         email: z.string().email(),
@@ -223,12 +223,6 @@ export const userRouter = createTRPCRouter({
       // Get the user to reset the password
       const user = await db.query.Users.findFirst({
         where: (table, { eq }) => eq(table.email, input.email),
-        // columns: {
-        //   id: true,
-        //   email: true,
-        //   emailVerified: true,
-        //   discordId: true,
-        // },
       })
 
       // checking if the user exists or not
@@ -253,5 +247,60 @@ export const userRouter = createTRPCRouter({
       await sendEmail(user.email, EmailTemplate.PasswordReset, { link: verificationLink })
 
       return { success: true, message: "Password reset link sent" }
+    }),
+  resetPassword: publicProcedure
+    .input(
+      z.object({
+        token: z.string().nonempty(),
+        password: z.string().min(6),
+      })
+    )
+    .mutation(async ({ input }) => {
+      // Find the password reset token
+      const passwordResetToken = await db.query.passwordResetTokens.findFirst({
+        where: (table, { eq }) => eq(table.id, input.token),
+        columns: {
+          id: true,
+          userId: true,
+          expiresAt: true,
+        },
+      })
+
+      // Check if token exists
+      if (!passwordResetToken) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Invalid or expired password reset token",
+        })
+      }
+
+      // Check if token is expired
+      if (new Date() > passwordResetToken.expiresAt) {
+        // Delete the expired token
+        await db
+          .delete(passwordResetTokens)
+          .where(eq(passwordResetTokens.id, passwordResetToken.id))
+
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Password reset token has expired. Please request a new one.",
+        })
+      }
+
+      // Hash the new password
+      const hashedPassword = await new Scrypt().hash(input.password)
+
+      // Update the user's password
+      await db
+        .update(Users)
+        .set({ hashedPassword })
+        .where(eq(Users.id, passwordResetToken.userId))
+
+      // Delete the used token
+      await db
+        .delete(passwordResetTokens)
+        .where(eq(passwordResetTokens.id, passwordResetToken.id))
+
+      return { success: true, message: "Password reset successfully" }
     }),
 })

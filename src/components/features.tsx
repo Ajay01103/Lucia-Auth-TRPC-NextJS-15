@@ -2,7 +2,7 @@ import React from "react"
 
 export const Features = () => {
   return (
-    <section>
+    <section id="features">
       <div className="py-16">
         <div className="mx-auto px-6 max-w-6xl text-gray-500">
           <div className="text-center">
@@ -34,7 +34,7 @@ export const Features = () => {
 
                 <div className="mt-6 pb-6 rounded-b-[--card-border-radius]">
                   <p className="text-gray-700 dark:text-gray-300">
-                    Credential authentication with email and password OAuth coming soon!
+                    Credential authentication with email and password as well as OAUTH
                   </p>
                 </div>
 

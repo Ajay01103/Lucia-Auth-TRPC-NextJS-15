@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import Link from "next/link"
 
 // Add this array at the top of your file
 const slides = [
@@ -31,11 +32,10 @@ export const Hero = () => {
           {/* Hero Title Section */}
           <div className="text-left">
             <h1 className="text-3xl font-semibold tracking-tight sm:text-3xl md:text-4xl lg:text-6xl">
-              Strategy guides product
+              Are you a lucia fan ?
             </h1>
             <p className="mt-3 text-2xl leading-15 font-medium md:text-4xl lg:text-5xl">
-              Streamline is the fit-for-purpose tool for planning and building modern
-              software products.
+              Struggling to add lucia to your app then you are at right place
             </p>
           </div>
           <div className="grid grid-cols-2 gap-5">
@@ -164,12 +164,13 @@ export const Hero = () => {
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-4">
-            <button
+            <Link
+              href="/signup"
               className="inline-flex items-center hover:opacity-90 bg-gray-900 justify-center gap-2 whitespace-nowrap rounded-sm text-sm font-semibold transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 text-primary-foreground shadow-sm h-9 px-4 py-2"
               aria-label="Get started"
             >
               Get started
-            </button>
+            </Link>
             <a href="#Streamline-news">
               <button
                 className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm text-sm font-semibold transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 max-sm:hidden"
