@@ -4,7 +4,7 @@ import { emailVerificationCodes, passwordResetTokens, Users } from "@/db/schema"
 import { generateId, Scrypt } from "lucia"
 import { z } from "zod"
 import { generateEmailVerificationCode } from "@/email/generate-email-verification-code"
-import { EmailTemplate, sendEmail } from "@/email"
+import { EmailTemplate, sendMail } from "@/email"
 import { and, eq, lt, or } from "drizzle-orm"
 import { lucia } from "@/lib/auth"
 import { cookies } from "next/headers"
@@ -69,7 +69,7 @@ export const userRouter = createTRPCRouter({
       // Generate and send verification code using the correct userId
       const verificationCode = await generateEmailVerificationCode(userId, input.email)
 
-      await sendEmail(input.email, EmailTemplate.EmailVerification, {
+      await sendMail(input.email, EmailTemplate.EmailVerification, {
         code: verificationCode,
       })
 
@@ -207,7 +207,7 @@ export const userRouter = createTRPCRouter({
       // Generate and send a new verification code
       const verificationCode = await generateEmailVerificationCode(user.id, email)
 
-      await sendEmail(email, EmailTemplate.EmailVerification, {
+      await sendMail(email, EmailTemplate.EmailVerification, {
         code: verificationCode,
       })
 
@@ -244,7 +244,7 @@ export const userRouter = createTRPCRouter({
       const verificationToken = await generatePasswordResetToken(user.id)
       const verificationLink = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password/${verificationToken}`
 
-      await sendEmail(user.email, EmailTemplate.PasswordReset, { link: verificationLink })
+      await sendMail(user.email, EmailTemplate.PasswordReset, { link: verificationLink })
 
       return { success: true, message: "Password reset link sent" }
     }),
