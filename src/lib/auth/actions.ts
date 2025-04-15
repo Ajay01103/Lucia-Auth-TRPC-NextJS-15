@@ -16,7 +16,7 @@ import {
   type LoginInput,
   resetPasswordSchema,
 } from "@/lib/validators/auth"
-import { users } from "@/db/schema"
+import { Users } from "@/db/schema"
 // import { sendMail, EmailTemplate } from "@/lib/email";
 import { validateRequest } from "@/lib/auth/validate-request"
 
@@ -34,10 +34,7 @@ export async function logout(): Promise<{ error: string } | void> {
   }
   await lucia.invalidateSession(session.id)
   const sessionCookie = lucia.createBlankSessionCookie()
-  ;(await cookies()).set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes
-  )
+  const Cookie = await cookies()
+  Cookie.set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes)
   return redirect("/")
 }
